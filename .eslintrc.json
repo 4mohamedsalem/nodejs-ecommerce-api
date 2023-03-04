@@ -1,0 +1,13 @@
+{
+  "env": {
+    "node": true
+  },
+  "extends": ["eslint:recommended", "standard", "prettier"],
+  "overrides": [],
+  "parserOptions": {
+    "ecmaVersion": "latest"
+  },
+  "rules": {
+    "quotes": ["error", "double"]
+  }
+}

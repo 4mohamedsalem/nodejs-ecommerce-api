@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require("mongoose")
 // 1- Create Schema
 const categorySchema = new mongoose.Schema(
   {
@@ -17,9 +17,9 @@ const categorySchema = new mongoose.Schema(
     image: String,
   },
   { timestamps: true } //create two fields in DB (createdAt, updatedAt)
-);
+)
 
 // 2- Create Model
-const CategoryModel = new mongoose.model("Category", categorySchema);
+const CategoryModel = new mongoose.model("Category", categorySchema)
 
-module.exports = CategoryModel;
+module.exports = CategoryModel
