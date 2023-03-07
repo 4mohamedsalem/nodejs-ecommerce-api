@@ -16,7 +16,7 @@ const categorySchema = new mongoose.Schema(
     },
     image: String,
   },
-  { timestamps: true } //create two fields in DB (createdAt, updatedAt)
+  { timestamps: true } // create two fields in DB (createdAt, updatedAt)
 )
 
 // 2- Create Model
