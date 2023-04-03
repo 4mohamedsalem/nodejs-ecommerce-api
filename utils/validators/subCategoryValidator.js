@@ -1,10 +1,10 @@
 const { check } = require("express-validator")
 const validatorMiddleware = require("../../middlewares/validatorMiddleware")
 
-// exports.getSubCategoryValidator = [
-//   check("id").isMongoId().withMessage("Invalid SubCategory id format"),
-//   validatorMiddleware,
-// ]
+exports.getSubCategoryValidator = [
+  check("id").isMongoId().withMessage("Invalid SubCategory id format"),
+  validatorMiddleware,
+]
 
 exports.createSubCategoryValidator = [
   check("name")
