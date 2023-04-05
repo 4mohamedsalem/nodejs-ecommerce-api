@@ -17,6 +17,9 @@ exports.createSubCategory = asyncHandler(async (req, res) => {
   res.status(201).json({ data: subCategory })
 })
 
+// Nested route
+// GET /api/v1/categories/:categoryId/subcategories
+
 // @desc    Get List of subcategories
 // @route   GET /api/v1/subcategories
 // @access  Public
@@ -25,7 +28,13 @@ exports.getSubCategories = asyncHandler(async (req, res) => {
   const limit = req.query.limit * 1 || 5
   const skip = (page - 1) * limit // (2-1) * 5 = 5
 
-  const subCategories = await SubCategory.find({}).skip(skip).limit(limit)
+  let filterObject = {}
+  if (req.params.categoryId) filterObject = { category: req.params.categoryId }
+
+  const subCategories = await SubCategory.find(filterObject)
+    .skip(skip)
+    .limit(limit)
+  // .populate({ path: "category", select: "name -_id" })
   res
     .status(200)
     .json({ results: subCategories.length, page, data: subCategories })

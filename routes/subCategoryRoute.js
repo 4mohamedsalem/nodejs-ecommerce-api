@@ -14,7 +14,9 @@ const {
   deleteSubCategoryValidator,
 } = require("../utils/validators/subCategoryValidator")
 
-const router = express.Router()
+// mergeParams: allow us to access parameters on other routers
+// ex: We need to access categoryId from category router
+const router = express.Router({ mergeParams: true })
 
 router
   .route("/")
