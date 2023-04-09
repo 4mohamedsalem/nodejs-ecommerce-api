@@ -16,7 +16,6 @@ const products = JSON.parse(fs.readFileSync("./products.json"))
 const insertData = async () => {
   try {
     await Product.create(products)
-
     console.log("Data Inserted".green.inverse)
     process.exit()
   } catch (error) {
