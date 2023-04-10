@@ -1,6 +1,7 @@
 const slugify = require("slugify")
 const asyncHandler = require("express-async-handler")
 const ApiError = require("../utils/apiError")
+const ApiFeatures = require("../utils/apiFeatures")
 
 const Brand = require("../models/brandModel")
 
@@ -8,12 +9,22 @@ const Brand = require("../models/brandModel")
 // @route   GET /api/v1/brands
 // @access  Public
 exports.getBrands = asyncHandler(async (req, res) => {
-  const page = req.query.page * 1 || 1
-  const limit = req.query.limit * 1 || 5
-  const skip = (page - 1) * limit // (2-1) * 5 = 5
+  // Build query
+  const documentsCounts = await Brand.countDocuments()
+  const apiFeatures = new ApiFeatures(Brand.find(), req.query)
+    .filter()
+    .paginate(documentsCounts)
+    .sort()
+    .limitFields()
+    .search()
 
-  const brands = await Brand.find({}).skip(skip).limit(limit)
-  res.status(200).json({ results: brands.length, page, data: brands })
+  // Execute query
+  const { mongooseQuery, paginationResult } = apiFeatures
+  const brands = await mongooseQuery
+
+  res
+    .status(200)
+    .json({ results: brands.length, paginationResult, data: brands })
 })
 
 // @desc    Get specific brand by id
