@@ -10,20 +10,21 @@ const Product = require("../models/productModel")
 // @access  Public
 exports.getProducts = asyncHandler(async (req, res) => {
   // Build query
+  const documentsCounts = await Product.countDocuments()
   const apiFeatures = new ApiFeatures(Product.find(), req.query)
     .filter()
-    .paginate()
+    .paginate(documentsCounts)
     .sort()
     .limitFields()
     .search()
-  // .populate({
-  //   path: "category",
-  //   select: "name -_id",
-  // })
-  // Execute query
-  const products = await apiFeatures.mongooseQuery
 
-  res.status(200).json({ results: products.length, data: products })
+  // Execute query
+  const { mongooseQuery, paginationResult } = apiFeatures
+  const products = await mongooseQuery
+
+  res
+    .status(200)
+    .json({ results: products.length, paginationResult, data: products })
 })
 
 // @desc    Get specific product by id
