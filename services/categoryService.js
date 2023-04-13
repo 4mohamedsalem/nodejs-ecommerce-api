@@ -1,3 +1,7 @@
+const multer = require("multer")
+const { v4: uuidv4 } = require("uuid")
+
+const ApiError = require("../utils/apiError")
 const factory = require("./handlersFactory")
 const Category = require("../models/categoryModel")
 
@@ -25,3 +29,28 @@ exports.updateCategory = factory.updateOne(Category)
 // @route   DELETE /api/v1/categories/:id
 // @access  Private
 exports.deleteCategory = factory.deleteOne(Category)
+
+// 1- DiskStorage engine
+const multerStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/categories")
+  },
+  filename: function (req, file, cb) {
+    // category-$(id)-Date.now-.jpg
+    const ext = file.mimetype.split("/")[1]
+    const filename = `category-${uuidv4()}-${Date.now()}.${ext}`
+    cb(null, filename)
+  },
+})
+
+const multerFilter = function (req, file, cb) {
+  if (file.mimetype.startsWith("image")) {
+    cb(null, true)
+  } else {
+    cb(new ApiError("Only Images allowed", 400), false)
+  }
+}
+
+const upload = multer({ storage: multerStorage, fileFilter: multerFilter })
+
+exports.uploadCategoryImage = upload.single("image")
