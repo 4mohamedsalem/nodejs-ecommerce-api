@@ -19,7 +19,22 @@ const categorySchema = new mongoose.Schema(
   { timestamps: true } // create two fields in DB (createdAt, updatedAt)
 )
 
+const setImageURL = (doc) => {
+  if (doc.image) {
+    const imageUrl = `${process.env.BASE_URL}/categories/${doc.image}`
+    doc.image = imageUrl
+  }
+}
+// findOne, findAll and update
+categorySchema.post("init", (doc) => {
+  setImageURL(doc)
+})
+// create
+categorySchema.post("save", (doc) => {
+  setImageURL(doc)
+})
+
 // 2- Create Model
-const CategoryModel = new mongoose.model("Category", categorySchema)
+const CategoryModel = mongoose.model("Category", categorySchema)
 
 module.exports = CategoryModel
